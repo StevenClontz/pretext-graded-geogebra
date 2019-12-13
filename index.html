@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>PreTeXt-graded Geogebra</title>
+        <meta name=viewport content="width=device-width,initial-scale=1">
+        <meta charset="utf-8"/>
+    </head>
+    <body>
+        <div id="gbb-applets"></div>
+        <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+
+        <script type="text/javascript">
+            var applet_ids = ["vhkyhs5b","tnccyn2e"];
+            var arrayLength = applet_ids.length;
+            function process_applet_id(applet_id) {
+              var currentlyCorrect = false;
+              function submitAnswer(){
+                if (currentlyCorrect){
+                    alert("Applet "+applet_id+" is correct!");
+                } else {
+                    alert("Applet "+applet_id+" is not yet correct.");
+                }
+              }
+              var applet = document.createElement("div");
+              applet.innerHTML = "Loading Geogebra applet "+applet_id+" ...";
+              applet.id = applet_id;
+              var applet_btn = document.createElement("button");
+              applet_btn.innerHTML = "Submit";
+              applet_btn.addEventListener('click',submitAnswer);
+              var applet_inject = document.createElement("div");
+              applet_inject.id = applet_id+"-inject";
+              applet.appendChild(applet_inject);
+              applet.appendChild(applet_btn);
+              document.getElementById("gbb-applets").appendChild(applet);
+              function appletOnLoad(api){
+                  function updateListener(objName){
+                          currentlyCorrect = api.getValue("ptxcorrect");
+                  }
+                  api.registerUpdateListener(updateListener);
+              }
+              var ggbApp = new GGBApplet({"material_id":applet_id, "appName": "graphing", "width": 800, "height": 600, "showToolBar": true, "showAlgebraInput": true, "showMenuBar": true , "appletOnLoad": appletOnLoad}, true);
+              window.addEventListener("load", function() {
+                                    ggbApp.inject(applet_id+"-inject");
+                                    });
+            }
+            for (var i = 0; i < arrayLength; i++) {
+              process_applet_id(applet_ids[i]);
+            }
+        </script>
+    </body>
+</html>
